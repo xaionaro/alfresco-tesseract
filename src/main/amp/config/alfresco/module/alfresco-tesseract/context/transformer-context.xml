@@ -12,9 +12,9 @@
 	language governing permissions and limitations under the License. -->
 <beans>
 
-	<!-- Transforms from TIFF to plain text using Tesseract
+	<!-- Transforms from PNG to plain text using Tesseract
 		 and a custom script -->
-	<bean id="transformer.worker.ocr.tiff"
+	<bean id="transformer.worker.ocr.png"
 		class="org.alfresco.repo.content.transform.RuntimeExecutableContentTransformerWorker">
 		<property name="mimetypeService">
 			<ref bean="mimetypeService" />
@@ -63,16 +63,16 @@
 		</property>
 	</bean>
 
-	<bean id="transformer.ocr.tiff"
+	<bean id="transformer.ocr.png"
 		class="org.alfresco.repo.content.transform.ProxyContentTransformer"
 		parent="baseContentTransformer">
 		<property name="worker">
-			<ref bean="transformer.worker.ocr.tiff" />
+			<ref bean="transformer.worker.ocr.png" />
 		</property>
 	</bean>
 
-	<!-- Transforms from PDF to TIFF using Ghostscript -->
-	<bean id="transformer.worker.pdf.tiff"
+	<!-- Transforms from PDF to PNG using ImageMagick (convert) -->
+	<bean id="transformer.worker.pdf.png"
 		class="org.alfresco.repo.content.transform.RuntimeExecutableContentTransformerWorker">
 		<property name="mimetypeService">
 			<ref bean="mimetypeService" />
@@ -83,7 +83,7 @@
 					<map>
 						<entry key=".*">
 							<list>
-								<value>${ghostscript.exe}</value>
+								<value>${convert.exe}</value>
 								<value>-v</value>
 							</list>
 						</entry>
@@ -98,18 +98,18 @@
 					<map>
 						<entry key=".*">
 							<list>
-								<value>${ghostscript.exe}</value>
-								<value>-o</value>
-								<value>${target}</value>
-								<value>-sDEVICE=tiff24nc</value>
-								<value>-r300</value>
+								<value>${convert.exe}</value>
+								<value>-density</value><value>500</value>
+								<value>-colorspace</value><value>Gray</value>
+								<value>-depth</value><value>8</value>
 								<value>${source}</value>
+								<value>${target}</value>
 							</list>
 						</entry>
 					</map>
 				</property>
 				<property name="errorCodes">
-					<value>1,2</value>
+					<value>1</value>
 				</property>
 				<property name="waitForCompletion">
 					<value>true</value>
@@ -121,11 +121,11 @@
 		</property>
 	</bean>
 
-	<bean id="transformer.pdf.tiff"
+	<bean id="transformer.pdf.png"
 		class="org.alfresco.repo.content.transform.ProxyContentTransformer"
 		parent="baseContentTransformer">
 		<property name="worker">
-			<ref bean="transformer.worker.pdf.tiff" />
+			<ref bean="transformer.worker.pdf.png" />
 		</property>
 	</bean>
 
