@@ -103,6 +103,7 @@
 								<value>-colorspace</value><value>Gray</value>
 								<value>-depth</value><value>8</value>
 								<value>${source}</value>
+								<value>-append</value>
 								<value>${target}</value>
 							</list>
 						</entry>
